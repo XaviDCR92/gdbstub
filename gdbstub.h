@@ -23,6 +23,8 @@
 #ifndef _GDBSTUB_H_
 #define _GDBSTUB_H_
 
+#include <stddef.h>
+
 /* Enable debug statements (printf) */
 #ifndef DEBUG
 #define DEBUG 0
@@ -48,10 +50,6 @@
 
 #ifndef EOF
 #define EOF (-1)
-#endif
-
-#ifndef NULL
-#define NULL ((void*)0)
 #endif
 
 #ifndef ASSERT
