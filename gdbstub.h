@@ -28,6 +28,11 @@
 #define DEBUG 0
 #endif
 
+#if DEBUG
+#include <stdio.h>
+#include <stdlib.h>
+#endif
+
 /* Include platform specific definitions */
 #include "gdbstub_sys.h"
 
