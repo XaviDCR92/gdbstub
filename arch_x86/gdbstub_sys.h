@@ -104,12 +104,12 @@ enum DBG_REGISTER {
 	DBG_CPU_I386_REG_ES        = 13,
 	DBG_CPU_I386_REG_FS        = 14,
 	DBG_CPU_I386_REG_GS        = 15,
-	DBG_CPU_I386_NUM_REGISTERS = 16
+	DBG_CPU_NUM_REGISTERS = 16
 };
 
 struct dbg_state {
 	int signum;
-	reg registers[DBG_CPU_I386_NUM_REGISTERS];
+	reg registers[DBG_CPU_NUM_REGISTERS];
 };
 
 /*****************************************************************************

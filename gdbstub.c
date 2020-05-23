@@ -807,7 +807,7 @@ int dbg_main(struct dbg_state *state)
 			pkt_len = status;
 			dbg_send_packet(pkt_buf, pkt_len);
 			break;
-		
+
 		/*
 		 * Write Registers
 		 * Command Format: G XX...
@@ -830,7 +830,7 @@ int dbg_main(struct dbg_state *state)
 			ptr_next += 1;
 			token_expect_integer_arg(addr);
 
-			if (addr >= DBG_CPU_I386_NUM_REGISTERS) {
+			if (addr >= DBG_CPU_NUM_REGISTERS) {
 				goto error;
 			}
 
@@ -843,7 +843,7 @@ int dbg_main(struct dbg_state *state)
 			}
 			dbg_send_packet(pkt_buf, status);
 			break;
-		
+
 		/*
 		 * Write a Register
 		 * Command Format: P n...=r...
@@ -853,7 +853,7 @@ int dbg_main(struct dbg_state *state)
 			token_expect_integer_arg(addr);
 			token_expect_seperator('=');
 
-			if (addr < DBG_CPU_I386_NUM_REGISTERS) {
+			if (addr < DBG_CPU_NUM_REGISTERS) {
 				status = dbg_dec_hex(ptr_next, token_remaining_buf,
 				                     (char *)&(state->registers[addr]),
 				                     sizeof(state->registers[addr]));
@@ -863,7 +863,7 @@ int dbg_main(struct dbg_state *state)
 			}
 			dbg_send_ok_packet(pkt_buf, sizeof(pkt_buf));
 			break;
-		
+
 		/*
 		 * Read Memory
 		 * Command Format: m addr,length
@@ -882,7 +882,7 @@ int dbg_main(struct dbg_state *state)
 			}
 			dbg_send_packet(pkt_buf, status);
 			break;
-		
+
 		/*
 		 * Write Memory
 		 * Command Format: M addr,length:XX..
@@ -923,7 +923,7 @@ int dbg_main(struct dbg_state *state)
 			dbg_send_ok_packet(pkt_buf, sizeof(pkt_buf));
 			break;
 
-		/* 
+		/*
 		 * Continue
 		 * Command Format: c [addr]
 		 */
