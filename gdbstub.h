@@ -82,7 +82,7 @@ int dbg_sys_getc(void);
 int dbg_sys_putchar(int ch);
 int dbg_sys_mem_readb(address addr, char *val);
 int dbg_sys_mem_writeb(address addr, char val);
-int dbg_sys_continue();
-int dbg_sys_step();
+int dbg_sys_continue(void);
+int dbg_sys_step(void);
 
 #endif
