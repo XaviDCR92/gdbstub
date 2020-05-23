@@ -742,7 +742,7 @@ int dbg_read(char *buf, size_t buf_len, size_t len)
 int dbg_main(struct dbg_state *state)
 {
 	address     addr;
-	char        pkt_buf[256];
+	char        pkt_buf[600];
 	int         status;
 	size_t      length;
 	size_t      pkt_len;
