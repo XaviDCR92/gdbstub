@@ -944,6 +944,62 @@ int dbg_main(struct dbg_state *state)
 			break;
 
 		/*
+		 * Breakpoint
+		 * Command Format: Z0,[addr],[type]
+		 */
+		case 'Z': {
+			int zero;
+			size_t brk_sz;
+
+			ptr_next += 1;
+			token_expect_integer_arg(zero);
+			token_expect_seperator(',');
+			token_expect_integer_arg(addr);
+			token_expect_seperator(',');
+			token_expect_integer_arg(brk_sz);
+
+			if (zero) {
+				goto error;
+			}
+
+			/* Set breakpoint */
+			if (dbg_sys_breakpoint(addr)) {
+				goto error;
+			}
+
+			dbg_send_ok_packet(pkt_buf, sizeof(pkt_buf));
+		}
+			break;
+
+		/*
+		 * Remove Breakpoint
+		 * Command Format: Z0,[addr],[type]
+		 */
+		case 'z': {
+			int zero;
+			size_t brk_sz;
+
+			ptr_next += 1;
+			token_expect_integer_arg(zero);
+			token_expect_seperator(',');
+			token_expect_integer_arg(addr);
+			token_expect_seperator(',');
+			token_expect_integer_arg(brk_sz);
+
+			if (zero) {
+				goto error;
+			}
+
+			/* Set breakpoint */
+			if (dbg_sys_del_breakpoint(addr)) {
+				goto error;
+			}
+
+			dbg_send_ok_packet(pkt_buf, sizeof(pkt_buf));
+		}
+			break;
+
+		/*
 		 * Unsupported Command
 		 */
 		default:
