@@ -33,8 +33,6 @@ typedef int (*dbg_dec_func)(const char *buf, size_t buf_len, char *data, size_t 
  * Const Data
  ****************************************************************************/
 
-const char digits[] = "0123456789abcdef";
-
 /*****************************************************************************
  * Prototypes
  ****************************************************************************/
@@ -172,6 +170,7 @@ int dbg_strtol(const char *str, size_t len, int base, const char **endptr)
 char dbg_get_digit(int val)
 {
 	if ((val >= 0) && (val <= 0xf)) {
+		static const char digits[] = "0123456789abcdef";
 		return digits[val];
 	} else {
 		return EOF;
