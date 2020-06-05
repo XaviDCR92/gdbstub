@@ -82,5 +82,7 @@ int dbg_sys_mem_readb(address addr, char *val);
 int dbg_sys_mem_writeb(address addr, char val);
 int dbg_sys_continue(void);
 int dbg_sys_step(void);
+int dbg_sys_breakpoint(address addr);
+int dbg_sys_del_breakpoint(address addr);
 
 #endif

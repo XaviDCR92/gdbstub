@@ -33,8 +33,6 @@ typedef int (*dbg_dec_func)(const char *buf, size_t buf_len, char *data, size_t 
  * Const Data
  ****************************************************************************/
 
-const char digits[] = "0123456789abcdef";
-
 /*****************************************************************************
  * Prototypes
  ****************************************************************************/
@@ -172,6 +170,7 @@ int dbg_strtol(const char *str, size_t len, int base, const char **endptr)
 char dbg_get_digit(int val)
 {
 	if ((val >= 0) && (val <= 0xf)) {
+		static const char digits[] = "0123456789abcdef";
 		return digits[val];
 	} else {
 		return EOF;
@@ -742,7 +741,7 @@ int dbg_read(char *buf, size_t buf_len, size_t len)
 int dbg_main(struct dbg_state *state)
 {
 	address     addr;
-	char        pkt_buf[512];
+	char        pkt_buf[600];
 	int         status;
 	size_t      length;
 	size_t      pkt_len;
@@ -929,6 +928,7 @@ int dbg_main(struct dbg_state *state)
 		 */
 		case 'c':
 			dbg_continue();
+			state->signum = 0;
 			return 0;
 
 		/*
@@ -937,10 +937,67 @@ int dbg_main(struct dbg_state *state)
 		 */
 		case 's':
 			dbg_step();
+			state->signum = 5;
 			return 0;
 
 		case '?':
 			dbg_send_signal_packet(pkt_buf, sizeof(pkt_buf), state->signum);
+			break;
+
+		/*
+		 * Breakpoint
+		 * Command Format: Z0,[addr],[type]
+		 */
+		case 'Z': {
+			int zero;
+			size_t brk_sz;
+
+			ptr_next += 1;
+			token_expect_integer_arg(zero);
+			token_expect_seperator(',');
+			token_expect_integer_arg(addr);
+			token_expect_seperator(',');
+			token_expect_integer_arg(brk_sz);
+
+			if (zero) {
+				goto error;
+			}
+
+			/* Set breakpoint */
+			if (dbg_sys_breakpoint(addr)) {
+				goto error;
+			}
+
+			dbg_send_ok_packet(pkt_buf, sizeof(pkt_buf));
+		}
+			break;
+
+		/*
+		 * Remove Breakpoint
+		 * Command Format: Z0,[addr],[type]
+		 */
+		case 'z': {
+			int zero;
+			size_t brk_sz;
+
+			ptr_next += 1;
+			token_expect_integer_arg(zero);
+			token_expect_seperator(',');
+			token_expect_integer_arg(addr);
+			token_expect_seperator(',');
+			token_expect_integer_arg(brk_sz);
+
+			if (zero) {
+				goto error;
+			}
+
+			/* Set breakpoint */
+			if (dbg_sys_del_breakpoint(addr)) {
+				goto error;
+			}
+
+			dbg_send_ok_packet(pkt_buf, sizeof(pkt_buf));
+		}
 			break;
 
 		/*
