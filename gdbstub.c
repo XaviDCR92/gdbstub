@@ -928,6 +928,7 @@ int dbg_main(struct dbg_state *state)
 		 */
 		case 'c':
 			dbg_continue();
+			state->signum = 0;
 			return 0;
 
 		/*
@@ -936,6 +937,7 @@ int dbg_main(struct dbg_state *state)
 		 */
 		case 's':
 			dbg_step();
+			state->signum = 5;
 			return 0;
 
 		case '?':
