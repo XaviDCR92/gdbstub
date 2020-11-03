@@ -21,6 +21,7 @@
  */
 
 #include "gdbstub.h"
+#include <signal.h>
 
 /*****************************************************************************
  * Types
@@ -592,8 +593,7 @@ int dbg_mem_write(const char *buf, size_t buf_len, address addr, size_t len, dbg
  */
 int dbg_continue(void)
 {
-	dbg_sys_continue();
-	return 0;
+	return dbg_sys_continue();
 }
 
 /*
@@ -601,8 +601,7 @@ int dbg_continue(void)
  */
 int dbg_step(void)
 {
-	dbg_sys_step();
-	return 0;
+	return dbg_sys_step();
 }
 
 /*****************************************************************************
@@ -927,8 +926,18 @@ int dbg_main(struct dbg_state *state)
 		 * Command Format: c [addr]
 		 */
 		case 'c':
-			dbg_continue();
-			state->signum = 0;
+			switch (dbg_continue()) {
+				case 0:
+					state->signum = SIGTRAP;
+					break;
+
+				case 1:
+					state->signum = SIGTRAP;
+					break;
+
+				default:
+					break;
+			}
 			return 0;
 
 		/*
@@ -936,8 +945,18 @@ int dbg_main(struct dbg_state *state)
 		 * Command Format: s [addr]
 		 */
 		case 's':
-			dbg_step();
-			state->signum = 5;
+			switch (dbg_step()) {
+				case 0:
+					state->signum = SIGTRAP;
+					break;
+
+				case 1:
+					state->signum = SIGTRAP;
+					break;
+
+				default:
+					break;
+			}
 			return 0;
 
 		case '?':
