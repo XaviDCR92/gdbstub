@@ -541,7 +541,7 @@ int dbg_dec_bin(const char *buf, size_t buf_len, char *data, size_t data_len)
  */
 int dbg_mem_read(char *buf, size_t buf_len, address addr, size_t len, dbg_enc_func enc)
 {
-	char data[64];
+	char data[512];
 	size_t pos;
 
 	if (len > sizeof(data)) {
